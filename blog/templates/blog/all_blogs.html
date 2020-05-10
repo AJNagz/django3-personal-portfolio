@@ -1,0 +1,47 @@
+<!-- add the base.html template here -->
+{%extends 'portfolio/base.html' %}
+
+<!-- load static for static content -->
+{% load static %}
+
+<!-- name 'content' must match with the base.html block name -->
+{% block content %}
+
+<h1 id="blogtitle" class="font-weight-bold text-center">all_blogs.html</h1>
+
+<!-- show total number of posts -->
+<!-- {{ blogs.count|pluralize }} - only adds or remove "s" from the blog word. -->
+<h3>Total blog posts are: {{ blogs.count }} blog{{ blogs.count|pluralize }}</h3>
+
+<!-- code inside href is making the blog title clickable -->
+<!-- blog:detail is because we used app_name = 'blog' in blog/urls.py -->
+<!-- when i changed the name to app_names = 'blog' , it is showing namespace error -->
+<!-- app_name attribute in the included URLconf module -->
+<!-- if we don't use 'app_names = 'blog' then we don't -->
+<!-- have to use 'blog:detail' below, only detail -->
+
+{% for blog in blogs %}
+<div class="row justify-content-center my-3">
+  <div class="col-md-10">
+
+   <a href="{% url 'blog:detail' blog.id %}"> 
+         <h3>{{ blog.title }}</h3>
+    </a>
+<!-- change the default date format  -->
+<!-- <p>{{ blog.date }}</p> -->
+<h5>{{ blog.date|date:'d M Y' |upper }}</h5>
+<!-- default desciption output -->
+<!-- <p>{{ blog.description }}</p> -->
+<!-- To restrict number of text, to show onlt excerpt like wordpress -->
+<!-- <p>{{ blog.description|truncatechars:150 }}</p> -->
+<!-- to add html inside the description, only showing on this page-->
+<!-- <p>{{ blog.description|safe|truncatechars:150 }}</p> --> 
+<!-- remove all html tags -->
+<h4>{{ blog.description|striptags|truncatechars:100 }}</h4>
+</div>
+</div>
+
+{% endfor %}
+
+<!-- end the content block-->
+{% endblock %}
